@@ -1,0 +1,144 @@
+﻿<!doctype html>
+<html lang="en">
+  <meta charset="utf-8" /><meta
+    name="viewport"
+    content="width=device-width,initial-scale=1"
+  /><title>Fitness Planner — Draft ERD</title
+  ><style>
+    body {
+      font: 15px system-ui;
+      background: #f3f6f2;
+      color: #163b2e;
+      margin: 30px;
+    }
+    svg {
+      width: 100%;
+      min-width: 900px;
+      background: white;
+      border: 1px solid #c9d8cc;
+      border-radius: 12px;
+    }
+    rect {
+      fill: #f2f7ef;
+      stroke: #37634b;
+    }
+    text {
+      font: 14px monospace;
+      fill: #183b2b;
+    }
+    .title {
+      font-weight: bold;
+      font-size: 17px;
+    }
+    path {
+      stroke: #347754;
+      stroke-width: 2;
+      fill: none;
+    }
+    .scroll {
+      overflow: auto;
+    }
+    li {
+      margin: 8px;
+    }
+  </style>
+  <h1>Fitness Planner · Draft ERD</h1>
+  <p>
+    Milestone 1 planning only. PK = primary key; FK = foreign key; ? = nullable.
+    Relationship labels give endpoint cardinalities.
+  </p>
+  <div class="scroll">
+    <svg
+      viewBox="0 0 1180 820"
+      role="img"
+      aria-label="Six database entities with primary keys, foreign keys and cardinalities. Full text relationships follow the diagram."
+    >
+      <rect x="30" y="40" width="300" height="240" rx="8" />
+      <text x="48" y="68" class="title">USERS</text>
+      <text x="48" y="96">
+        <tspan x="48">PK id</tspan>
+        <tspan x="48" dy="23">name, email UNIQUE</tspan>
+        <tspan x="48" dy="23">password_hash, role</tspan>
+        <tspan x="48" dy="23">age?, height_cm?</tspan>
+        <tspan x="48" dy="23">weight_kg?, fitness_goal</tspan>
+      </text>
+      <rect x="440" y="40" width="300" height="240" rx="8" />
+      <text x="458" y="68" class="title">WORKOUT PLANS</text>
+      <text x="458" y="96">
+        <tspan x="458">PK id</tspan>
+        <tspan x="458" dy="23">FK user_id → Users</tspan>
+        <tspan x="458" dy="23">name, description</tspan>
+        <tspan x="458" dy="23">planned_date</tspan>
+      </text>
+      <rect x="850" y="40" width="300" height="240" rx="8" />
+      <text x="868" y="68" class="title">PLAN EXERCISES</text>
+      <text x="868" y="96">
+        <tspan x="868">PK id</tspan>
+        <tspan x="868" dy="23">FK plan_id → Plans</tspan>
+        <tspan x="868" dy="23">FK exercise_id → Exercises</tspan>
+        <tspan x="868" dy="23">position, target_sets?</tspan>
+        <tspan x="868" dy="23">target_reps?,</tspan>
+        <tspan x="868" dy="23">target_weight_kg?</tspan>
+      </text>
+      <rect x="30" y="490" width="300" height="240" rx="8" />
+      <text x="48" y="518" class="title">WORKOUT SESSIONS</text>
+      <text x="48" y="546">
+        <tspan x="48">PK id</tspan>
+        <tspan x="48" dy="23">FK user_id → Users</tspan>
+        <tspan x="48" dy="23">FK plan_id? → Plans</tspan>
+        <tspan x="48" dy="23">workout_date, notes?</tspan>
+        <tspan x="48" dy="23">UNIQUE(user_id, workout_date)</tspan>
+      </text>
+      <rect x="440" y="490" width="300" height="240" rx="8" />
+      <text x="458" y="518" class="title">EXERCISE LOGS</text>
+      <text x="458" y="546">
+        <tspan x="458">PK id</tspan>
+        <tspan x="458" dy="23">FK session_id → Sessions</tspan>
+        <tspan x="458" dy="23">FK exercise_id → Exercises</tspan>
+        <tspan x="458" dy="23">sets, reps, weight_kg</tspan>
+      </text>
+      <rect x="850" y="490" width="300" height="240" rx="8" />
+      <text x="868" y="518" class="title">EXERCISES</text>
+      <text x="868" y="546">
+        <tspan x="868">PK id</tspan>
+        <tspan x="868" dy="23">name UNIQUE</tspan>
+        <tspan x="868" dy="23">muscle_group</tspan>
+      </text>
+      <path d="M330 135 H440" />
+      <text x="337" y="124">1</text>
+      <text x="388" y="124">0..*</text>
+      <path d="M740 135 H850" />
+      <text x="747" y="124">1</text>
+      <text x="796" y="124">0..*</text>
+      <path d="M180 280 V490" />
+      <text x="190" y="310">1</text>
+      <text x="190" y="470">0..*</text>
+      <path d="M490 280 V372 H280 V490" />
+      <text x="500" y="310">0..1</text>
+      <text x="290" y="470">0..*</text>
+      <path d="M330 615 H440" />
+      <text x="337" y="604">1</text>
+      <text x="388" y="604">0..*</text>
+      <path d="M850 615 H740" />
+      <text x="828" y="604">1</text>
+      <text x="747" y="604">0..*</text>
+      <path d="M1000 490 V280" />
+      <text x="1010" y="470">1</text>
+      <text x="1010" y="310">0..*</text>
+    </svg>
+  </div>
+  <ul>
+    <li>Users 1 → 0..many Plans and Sessions.</li>
+    <li>
+      Plans 1 → 0..many Plan Exercises; Exercises 1 → 0..many Plan Exercises.
+    </li>
+    <li>
+      A Session optionally references one Plan; a Plan can have many Sessions.
+    </li>
+    <li>Sessions 1 → 0..many Logs; Exercises 1 → 0..many Logs.</li>
+  </ul>
+  <p>
+    See <a href="ERD.md">ERD.md</a> for constraints, ownership and deletion
+    policies.
+  </p>
+</html>

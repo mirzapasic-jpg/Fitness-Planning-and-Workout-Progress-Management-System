@@ -1,0 +1,32 @@
+﻿<section class="auth card">
+  <span class="eyebrow">Welcome back</span>
+  <h1>Time to show up.</h1>
+  <p class="muted">Log in to your fitness planning demo.</p>
+  <div class="demo-note">
+    Mock authentication only; no PHP, JWT, or secure accounts.<br />User:
+    <strong>user@forma.demo</strong><br />Admin:
+    <strong>admin@forma.demo</strong><br />Public demo password:
+    <strong>Demo123!</strong><br />Registered and admin-created demo users use
+    the same public password. Reloading resets the demo.
+  </div>
+  <form id="loginForm">
+    <label for="loginEmail">Email</label
+    ><input
+      id="loginEmail"
+      name="email"
+      type="email"
+      required
+      autocomplete="username"
+    /><label for="loginPassword">Demo password</label
+    ><input
+      id="loginPassword"
+      name="password"
+      type="password"
+      required
+      autocomplete="current-password"
+    />
+    <p id="authError" class="error" role="alert"></p>
+    <button type="submit">Log in</button>
+  </form>
+  <p>New here? <a href="#register">Create a demo account</a></p>
+</section>
