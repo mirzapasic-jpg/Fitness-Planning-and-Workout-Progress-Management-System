@@ -81,8 +81,3 @@ The dashboard reserves a visible **Fuel your recovery** section for TheMealDB re
 
 Swagger URL: not available yet. Deployment URL: not available yet.
 
-## Validation and submission
-
-See [testing record and manual checklist](docs/TESTING.md). AI assistance and corrections are documented in [AI_LOG](docs/AI_LOG.md). Milestone 1 implementation covers structure (0.5), static SPA (1), and draft schema (0.5), with README and AI documentation. Instructor grading and submission remain external steps.
-
-Keep work on `milestone1`. Review changes before committing. Create a PR from `milestone1` to `main` and request `ibu-web-programming2001`; ensure they are a repository collaborator. Do not merge it yourself. Submit the topic/repository through the LMS. The supplied course document lists the M1 deadline as 26 October 2026 at 08:00.
