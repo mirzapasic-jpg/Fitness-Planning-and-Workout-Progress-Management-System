@@ -1,0 +1,25 @@
+﻿<section class="page-header">
+  <div>
+    <span class="eyebrow">Demo administration</span>
+    <h1>Admin workspace</h1>
+    <p>Manage the people and movements behind the training.</p>
+  </div>
+  <button data-action="add" data-type="user">+ Add user</button>
+</section>
+<div id="adminStats"></div>
+<section class="card">
+  <h2>User management</h2>
+  <div id="usersTable"></div>
+</section>
+<section class="card">
+  <div class="page-header">
+    <h2>Exercise management</h2>
+    <button data-action="add" data-type="exercise">+ Add exercise</button>
+  </div>
+  <div id="adminExercises"></div>
+</section>
+<p class="demo-note">
+  Client-side role checks demonstrate navigation only. Real access control and
+  JWT middleware are planned for Milestone 4. The active admin cannot delete or
+  demote their own account.
+</p>
