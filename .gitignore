@@ -1,0 +1,14 @@
+﻿backend/logs/*
+!backend/logs/.gitkeep
+**/vendor/
+node_modules/
+backend/config/config.php
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+Thumbs.db
+Desktop.ini
+playwright-report/
+test-results/

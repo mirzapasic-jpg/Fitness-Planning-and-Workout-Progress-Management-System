@@ -1,0 +1,34 @@
+﻿<section class="page-header">
+  <div>
+    <span class="eyebrow">See the bigger picture</span>
+    <h1>Your progress</h1>
+    <p>Proof that showing up makes a difference.</p>
+  </div>
+  <a class="button" href="#workout-log">+ Log a workout</a>
+</section>
+<div id="progressStats"></div>
+<div class="grid">
+  <section class="card">
+    <h2>Workout activity</h2>
+    <p class="muted">Total sets per training date</p>
+    <canvas id="activityChart" class="chart" tabindex="0" role="img"></canvas>
+    <p id="activityChartDetails" class="chart-details" aria-live="polite"></p>
+  </section>
+  <section class="card">
+    <h2>Strength over time</h2>
+    <label for="chartExercise">Exercise</label
+    ><select id="chartExercise" class="chart-controls"></select
+    ><canvas id="strengthChart" class="chart" tabindex="0" role="img"></canvas>
+    <p id="strengthChartDetails" class="chart-details" aria-live="polite"></p>
+  </section>
+</div>
+<section class="card" style="margin-top: 22px">
+  <h2>Personal records</h2>
+  <div id="personalRecords"></div>
+  <p class="muted">
+    Training volume = sets × repetitions × weight (kg). Best set volume =
+    repetitions × weight. Bodyweight and timed exercises contribute zero
+    external-load volume. Use left/right arrow keys on a chart to explore
+    values.
+  </p>
+</section>

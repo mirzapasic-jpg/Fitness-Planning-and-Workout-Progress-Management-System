@@ -1,0 +1,49 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Forma | Fitness Planner</title>
+    <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <aside>
+      <a class="brand" href="#dashboard"
+        ><span>F</span> FORMA<small>TRAIN WITH INTENTION</small></a
+      >
+      <nav aria-label="Main navigation"></nav>
+      <div class="sidebar-note">
+        YOUR NEXT REP COUNTS.
+        <p>Small steps. Stronger every day.</p>
+      </div>
+    </aside>
+    <div class="workspace">
+      <header>
+        <span>Fitness planning & progress</span>
+        <div id="account"></div>
+      </header>
+      <main id="app" tabindex="-1"></main>
+      <footer>
+        Milestone 1 · Interactive frontend demo · Data stays in this tab
+      </footer>
+    </div>
+    <div id="notice" role="status" aria-live="polite"></div>
+    <dialog id="editor">
+      <form id="editorForm">
+        <div class="dialog-heading">
+          <h2 id="editorTitle"></h2>
+          <button type="button" data-close aria-label="Close dialog">×</button>
+        </div>
+        <div id="fields"></div>
+        <p id="formError" role="alert"></p>
+        <div class="actions">
+          <button type="submit">Save changes</button
+          ><button type="button" class="secondary" data-close>Cancel</button>
+        </div>
+      </form>
+    </dialog>
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+  </body>
+</html>

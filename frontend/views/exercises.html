@@ -1,0 +1,33 @@
+﻿<section class="page-header">
+  <div>
+    <span class="eyebrow">Find your next movement</span>
+    <h1>Exercise library</h1>
+    <p>Build your toolkit for a stronger you.</p>
+  </div>
+  <button data-action="add" data-type="exercise">+ Add exercise</button>
+</section>
+<section class="card">
+  <div class="toolbar">
+    <label for="exerciseSearch">Search</label
+    ><input
+      id="exerciseSearch"
+      type="search"
+      placeholder="Search exercises…"
+    /><label for="muscleFilter">Muscle group</label
+    ><select id="muscleFilter">
+      <option value="">All muscle groups</option>
+      <option>Chest</option>
+      <option>Back</option>
+      <option>Legs</option>
+      <option>Shoulders</option>
+      <option>Arms</option>
+      <option>Core</option>
+    </select>
+  </div>
+  <p id="exerciseCount" class="muted" role="status"></p>
+  <div id="exerciseList"></div>
+  <p class="muted">
+    Exercises used by a plan or workout log are protected from deletion. Remove
+    their references first.
+  </p>
+</section>

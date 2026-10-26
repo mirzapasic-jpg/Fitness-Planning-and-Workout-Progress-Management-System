@@ -1,0 +1,48 @@
+﻿<section class="auth card">
+  <span class="eyebrow">Start your next chapter</span>
+  <h1>Make room for progress.</h1>
+  <p class="demo-note">
+    Registration demonstration only. Use fictional details and the public
+    password <strong>Demo123!</strong>. No password is saved. All demo users
+    share this password; accounts disappear on reload. New accounts receive the
+    User role.
+  </p>
+  <form id="registerForm">
+    <label for="registerName">Full name</label
+    ><input
+      id="registerName"
+      name="name"
+      required
+      minlength="2"
+      maxlength="80"
+      autocomplete="name"
+    /><label for="registerEmail">Email</label
+    ><input
+      id="registerEmail"
+      name="email"
+      type="email"
+      required
+      maxlength="120"
+      autocomplete="email"
+    /><label for="registerPassword">Demo password</label
+    ><input
+      id="registerPassword"
+      name="password"
+      type="password"
+      required
+      minlength="8"
+      autocomplete="new-password"
+    /><label for="confirmPassword">Confirm password</label
+    ><input
+      id="confirmPassword"
+      name="confirmation"
+      type="password"
+      required
+      minlength="8"
+      autocomplete="new-password"
+    />
+    <p id="authError" class="error" role="alert"></p>
+    <button type="submit">Create demo account</button>
+  </form>
+  <p>Already have an account? <a href="#login">Log in</a></p>
+</section>
