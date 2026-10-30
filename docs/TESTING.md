@@ -1,4 +1,4 @@
-﻿# Milestone 1 - Testing Report
+# Milestone 1 - Testing Report
 
 ## 1. Testing Overview
 
@@ -87,3 +87,30 @@ Based on the recorded automated tests, the application meets the implementation 
 The frontend currently uses temporary data. Real authentication, PHP backend functionality, MySQL database integration, and external API integration are planned for future milestones.
 
 Final manual verification and GitHub submission are still required.
+## Milestone 2 — 2026-10-30
+
+The report above records M1 results. M2 adds independent database/DAO verification; the M1 browser suite was not rerun and the frontend was not changed.
+
+Environment: Windows / XAMPP PHP 8.2.12, PDO with pdo_mysql, MariaDB 10.4.32 at 127.0.0.1. The target fitness_planner database did not exist before the schema import. Importing backend/database/fitness-planner.sql using the XAMPP mysql client succeeded without SQL errors.
+
+| Check | Actual result |
+| --- | --- |
+| PHP syntax: configuration, Database.php, BaseDao, all six entity DAOs and tests/dao.php | All passed |
+| PDO connection and sample reads from all six tables | Passed |
+| Create, read by ID, persisted update, unchanged update, delete for all six DAOs | Passed |
+| Missing record behavior, empty writes, primary-key protection, invalid column rejection | Passed |
+| SQL-like value stored literally without changing role | Passed |
+| Duplicate emails, exercise names, plan assignments/positions, user/date sessions | Rejected as expected |
+| Lowercase/trimmed email CHECK | Rejected uppercase fixture as expected |
+| All seven foreign keys and an invalid FK update | Rejected invalid references as expected |
+| Positive sets/reps/position and nonnegative target/log weights | Invalid values rejected as expected |
+| Exercise delete restricted with assignment-only or log-only references | Passed |
+| Plan cascade + session SET NULL while retaining logs | Passed |
+| Session cascade and user cascade through all owned children | Passed |
+| Shared exercises survive user deletion | Passed |
+| Original full row snapshots compared after rollback | Identical; passed |
+| CLI runtime suite | 98 checks passed |
+
+Run from the repository root: `C:\xampp\php\php.exe tests/dao.php`. The script returns exit code 1 on failure and rolls back an active test transaction; success returns 0. It is CLI-only and does not create/import/drop tables. Run with the supplied sample data on an idle local database. InnoDB auto-increment counters can advance despite rollback; no test rows remain.
+
+Limitations: Oracle MySQL and phpMyAdmin's GUI import were not exercised. Future service-level date, ownership, email-format and required-plan-assignment validation are intentionally outside M2. Authentication, HTTP routes/status handling, frontend AJAX database integration and production deployment remain later milestones. No claims of those checks passing are made here.
