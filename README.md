@@ -6,7 +6,7 @@ Forma is a responsive single-page fitness dashboard for planning routines, manag
 
 Implemented: nine HTML views loaded through AJAX without full document reloads; workout plan, exercise and workout log CRUD; dashboard; interactive canvas charts; mock login/registration with User and Admin roles; editable profile; admin user/exercise management; and a six-entity draft ERD. Data is shared between pages, held in memory, and reset on reload. The initial demo is signed in as the sample User.
 
-This is a frontend demonstration. Client-side roles are not security controls. There is no PHP API, database, JWT authentication, external API integration, OpenAPI page, or deployed application yet.
+This is a frontend demonstration. Client-side roles are not security controls. The Milestone 1 frontend remains a mock demonstration. Milestone 2 adds a separate database and DAO layer below; there is no PHP API, JWT authentication, external API integration, OpenAPI page, or deployed application yet.
 
 ## Run locally with XAMPP
 
@@ -40,7 +40,7 @@ Users manage their own plans and workout records, edit their profile, and manage
 
 ## Technology and structure
 
-Current: HTML templates, CSS, vanilla JavaScript, Fetch API for SPA templates, native dialog and canvas. Planned: PHP with FlightPHP REST routes, MySQL via PDO, JWT, OpenAPI, request/error middleware and logging.
+Current: HTML templates, CSS, vanilla JavaScript, Fetch API for SPA templates, native dialog and canvas, plus a separate MySQL/PDO DAO layer. Planned: FlightPHP REST routes, JWT, OpenAPI, request/error middleware and logging.
 
 ```text
 frontend/
@@ -66,7 +66,7 @@ README.md
 
 See [draft ERD](docs/ERD.html) in a browser and [schema notes](docs/ERD.md). Six entities: Users, Exercises, Workout Plans, Plan Exercises, Workout Sessions, Exercise Logs. Users own plans and sessions; plans have many exercise assignments; sessions have many logs; exercises are referenced by assignments and logs. Optional session-to-plan association preserves history when a plan is deleted. The mock frontend groups records by user/date; database sessions will provide explicit session IDs later.
 
-No database has been created. SQL import and secret configuration instructions will accompany Milestone 2. Secrets will live in ignored configuration, with a non-secret example committed later.
+Milestone 2 implements this original six-entity design. See the setup and DAO instructions below. The frontend still uses its original in-memory fixtures.
 
 ## Planned external API
 
@@ -74,10 +74,15 @@ The dashboard reserves a visible **Fuel your recovery** section for TheMealDB re
 
 ## Later milestones
 
-- M2: MySQL schema/sample export and PDO DAO CRUD.
+- M2 (implemented): MySQL schema/sample SQL and PDO DAO CRUD.
 - M3: services, FlightPHP REST CRUD, OpenAPI/Swagger, third-party API service.
 - M4: hashed passwords, JWT, reusable role middleware, request/error logging, fully connected AJAX frontend.
 - M5: frontend MVC refinement, full client/server validation and deployment.
 
-Swagger URL: not available yet. Deployment URL: not available yet.
 
+
+## Milestone 2: database setup on Windows
+
+I designed the six entities and their relationships in M1. sQL types and lengths make concrete choices where the draft ERD did not specify them: unsigned integer IDs, VARCHAR text fields, DATE dates, DECIMAL weights and nullable optional fields. No entity or ERD column was removed or added.
+
+The future request path is AJAX → FlightPHP route → service → DAO → PDO → MySQL. M2 implements only the last two layers. The frontend and historical ERD files were preserved.
