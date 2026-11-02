@@ -1,4 +1,4 @@
-﻿# AI Usage Log
+# AI Usage Log
 
 ## Milestone 1
 
@@ -22,3 +22,11 @@
 - **Problem:** AI initially used an incorrect expected training volume.
 - **How it was identified:** The expected value did not match the calculated result.
 - **How it was corrected:** The test expectation was corrected and the test passed.
+## Milestone 2
+AI Usage:
+I designed the database entities and relationships myself during Milestone 1. I used ChatGPT for occasional guidance and naming suggestions, and Codex for assistance with testing.
+Issues and Corrections:
+The first approach to reading the requirements document did not work, so I used another method.
+There was an issue with a variable in the DAO constructors, which was corrected after checking the code.
+Testing:
+The database was imported successfully, and all 98 DAO test checks passed.
