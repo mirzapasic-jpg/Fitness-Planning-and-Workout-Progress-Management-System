@@ -1,0 +1,1696 @@
+"openapi": "3.0.3"
+"info":
+  "title": "Forma Milestone 3 API"
+  "version": "1.0.0"
+  "description": "Local educational API. No authentication or authorization until M4: 401/403 are reserved for that milestone. All request bodies are JSON objects; unknown fields and empty objects are rejected. PUT accepts a nonempty partial update and preserves omitted fields. Numeric strings are also accepted by validation; use JSON numbers. Dates must be real YYYY-MM-DD dates between 1000-01-01 and 9999-12-31. Plans linked to workout history cannot be transferred to another user. DELETE follows the original schema: user cascades owned records, plan cascades assignments and detaches sessions, session cascades logs, referenced exercises cannot be deleted. Do not expose this unauthenticated API publicly."
+"servers":
+  - 
+    "url": ".."
+    "description": "Same backend as this specification (XAMPP or PHP development server)"
+"tags":
+  - 
+    "name": "users"
+  - 
+    "name": "exercises"
+  - 
+    "name": "workout-plans"
+  - 
+    "name": "plan-exercises"
+  - 
+    "name": "workout-sessions"
+  - 
+    "name": "exercise-logs"
+  - 
+    "name": "meals"
+"paths":
+  "/api/users":
+    "get":
+      "tags":
+        - "users"
+      "operationId": "listUser"
+      "summary": "List users"
+      "responses":
+        "200":
+          "description": "All records ordered by id."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "$ref": "#/components/schemas/User"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "post":
+      "tags":
+        - "users"
+      "operationId": "createUser"
+      "summary": "Create User"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/UserCreate"
+      "responses":
+        "201":
+          "description": "Record created."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/User"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/users/{id}":
+    "parameters":
+      - 
+        "name": "id"
+        "in": "path"
+        "required": true
+        "description": "Positive decimal integer without leading zeroes."
+        "schema":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+    "get":
+      "tags":
+        - "users"
+      "operationId": "getUser"
+      "summary": "Get User"
+      "responses":
+        "200":
+          "description": "Record found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/User"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "put":
+      "tags":
+        - "users"
+      "operationId": "updateUser"
+      "summary": "Update User"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/UserUpdate"
+      "responses":
+        "200":
+          "description": "Updated record, including unchanged updates."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/User"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "delete":
+      "tags":
+        - "users"
+      "operationId": "deleteUser"
+      "summary": "Delete User"
+      "responses":
+        "200":
+          "description": "Record deleted."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Message"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/exercises":
+    "get":
+      "tags":
+        - "exercises"
+      "operationId": "listExercise"
+      "summary": "List exercises"
+      "responses":
+        "200":
+          "description": "All records ordered by id."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "$ref": "#/components/schemas/Exercise"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "post":
+      "tags":
+        - "exercises"
+      "operationId": "createExercise"
+      "summary": "Create Exercise"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/ExerciseCreate"
+      "responses":
+        "201":
+          "description": "Record created."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Exercise"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/exercises/{id}":
+    "parameters":
+      - 
+        "name": "id"
+        "in": "path"
+        "required": true
+        "description": "Positive decimal integer without leading zeroes."
+        "schema":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+    "get":
+      "tags":
+        - "exercises"
+      "operationId": "getExercise"
+      "summary": "Get Exercise"
+      "responses":
+        "200":
+          "description": "Record found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Exercise"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "put":
+      "tags":
+        - "exercises"
+      "operationId": "updateExercise"
+      "summary": "Update Exercise"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/ExerciseUpdate"
+      "responses":
+        "200":
+          "description": "Updated record, including unchanged updates."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Exercise"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "delete":
+      "tags":
+        - "exercises"
+      "operationId": "deleteExercise"
+      "summary": "Delete Exercise"
+      "responses":
+        "200":
+          "description": "Record deleted."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Message"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/workout-plans":
+    "get":
+      "tags":
+        - "workout-plans"
+      "operationId": "listWorkoutPlan"
+      "summary": "List workout-plans"
+      "responses":
+        "200":
+          "description": "All records ordered by id."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "$ref": "#/components/schemas/WorkoutPlan"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "post":
+      "tags":
+        - "workout-plans"
+      "operationId": "createWorkoutPlan"
+      "summary": "Create WorkoutPlan"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/WorkoutPlanCreate"
+      "responses":
+        "201":
+          "description": "Record created."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/WorkoutPlan"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/workout-plans/{id}":
+    "parameters":
+      - 
+        "name": "id"
+        "in": "path"
+        "required": true
+        "description": "Positive decimal integer without leading zeroes."
+        "schema":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+    "get":
+      "tags":
+        - "workout-plans"
+      "operationId": "getWorkoutPlan"
+      "summary": "Get WorkoutPlan"
+      "responses":
+        "200":
+          "description": "Record found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/WorkoutPlan"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "put":
+      "tags":
+        - "workout-plans"
+      "operationId": "updateWorkoutPlan"
+      "summary": "Update WorkoutPlan"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/WorkoutPlanUpdate"
+      "responses":
+        "200":
+          "description": "Updated record, including unchanged updates."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/WorkoutPlan"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "delete":
+      "tags":
+        - "workout-plans"
+      "operationId": "deleteWorkoutPlan"
+      "summary": "Delete WorkoutPlan"
+      "responses":
+        "200":
+          "description": "Record deleted."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Message"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/plan-exercises":
+    "get":
+      "tags":
+        - "plan-exercises"
+      "operationId": "listPlanExercise"
+      "summary": "List plan-exercises"
+      "responses":
+        "200":
+          "description": "All records ordered by id."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "$ref": "#/components/schemas/PlanExercise"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "post":
+      "tags":
+        - "plan-exercises"
+      "operationId": "createPlanExercise"
+      "summary": "Create PlanExercise"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/PlanExerciseCreate"
+      "responses":
+        "201":
+          "description": "Record created."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/PlanExercise"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/plan-exercises/{id}":
+    "parameters":
+      - 
+        "name": "id"
+        "in": "path"
+        "required": true
+        "description": "Positive decimal integer without leading zeroes."
+        "schema":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+    "get":
+      "tags":
+        - "plan-exercises"
+      "operationId": "getPlanExercise"
+      "summary": "Get PlanExercise"
+      "responses":
+        "200":
+          "description": "Record found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/PlanExercise"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "put":
+      "tags":
+        - "plan-exercises"
+      "operationId": "updatePlanExercise"
+      "summary": "Update PlanExercise"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/PlanExerciseUpdate"
+      "responses":
+        "200":
+          "description": "Updated record, including unchanged updates."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/PlanExercise"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "delete":
+      "tags":
+        - "plan-exercises"
+      "operationId": "deletePlanExercise"
+      "summary": "Delete PlanExercise"
+      "responses":
+        "200":
+          "description": "Record deleted."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Message"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/workout-sessions":
+    "get":
+      "tags":
+        - "workout-sessions"
+      "operationId": "listWorkoutSession"
+      "summary": "List workout-sessions"
+      "responses":
+        "200":
+          "description": "All records ordered by id."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "$ref": "#/components/schemas/WorkoutSession"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "post":
+      "tags":
+        - "workout-sessions"
+      "operationId": "createWorkoutSession"
+      "summary": "Create WorkoutSession"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/WorkoutSessionCreate"
+      "responses":
+        "201":
+          "description": "Record created."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/WorkoutSession"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/workout-sessions/{id}":
+    "parameters":
+      - 
+        "name": "id"
+        "in": "path"
+        "required": true
+        "description": "Positive decimal integer without leading zeroes."
+        "schema":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+    "get":
+      "tags":
+        - "workout-sessions"
+      "operationId": "getWorkoutSession"
+      "summary": "Get WorkoutSession"
+      "responses":
+        "200":
+          "description": "Record found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/WorkoutSession"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "put":
+      "tags":
+        - "workout-sessions"
+      "operationId": "updateWorkoutSession"
+      "summary": "Update WorkoutSession"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/WorkoutSessionUpdate"
+      "responses":
+        "200":
+          "description": "Updated record, including unchanged updates."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/WorkoutSession"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "delete":
+      "tags":
+        - "workout-sessions"
+      "operationId": "deleteWorkoutSession"
+      "summary": "Delete WorkoutSession"
+      "responses":
+        "200":
+          "description": "Record deleted."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Message"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/exercise-logs":
+    "get":
+      "tags":
+        - "exercise-logs"
+      "operationId": "listExerciseLog"
+      "summary": "List exercise-logs"
+      "responses":
+        "200":
+          "description": "All records ordered by id."
+          "content":
+            "application/json":
+              "schema":
+                "type": "array"
+                "items":
+                  "$ref": "#/components/schemas/ExerciseLog"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "post":
+      "tags":
+        - "exercise-logs"
+      "operationId": "createExerciseLog"
+      "summary": "Create ExerciseLog"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/ExerciseLogCreate"
+      "responses":
+        "201":
+          "description": "Record created."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/ExerciseLog"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/exercise-logs/{id}":
+    "parameters":
+      - 
+        "name": "id"
+        "in": "path"
+        "required": true
+        "description": "Positive decimal integer without leading zeroes."
+        "schema":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+    "get":
+      "tags":
+        - "exercise-logs"
+      "operationId": "getExerciseLog"
+      "summary": "Get ExerciseLog"
+      "responses":
+        "200":
+          "description": "Record found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/ExerciseLog"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "put":
+      "tags":
+        - "exercise-logs"
+      "operationId": "updateExerciseLog"
+      "summary": "Update ExerciseLog"
+      "requestBody":
+        "required": true
+        "content":
+          "application/json":
+            "schema":
+              "$ref": "#/components/schemas/ExerciseLogUpdate"
+      "responses":
+        "200":
+          "description": "Updated record, including unchanged updates."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/ExerciseLog"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+    "delete":
+      "tags":
+        - "exercise-logs"
+      "operationId": "deleteExerciseLog"
+      "summary": "Delete ExerciseLog"
+      "responses":
+        "200":
+          "description": "Record deleted."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Message"
+        "400":
+          "description": "Invalid input, duplicate unique value, nonexistent foreign key, or restricted deletion."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "404":
+          "description": "Record or endpoint not found."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/api/meals/recovery":
+    "get":
+      "tags":
+        - "meals"
+      "operationId": "getRecoveryMeals"
+      "summary": "Get up to three chicken recipe ideas for Fuel your recovery"
+      "description": "Calls TheMealDB search.php?s=chicken using public educational key 1. No nutritional claims. Connection timeout 3 seconds; total timeout 8 seconds. Failures are written to backend/logs/error.log."
+      "responses":
+        "200":
+          "description": "Structured meal suggestions."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/RecoveryMeals"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+        "503":
+          "description": "Meal suggestions are temporarily unavailable. Please try again later."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+  "/":
+    "get":
+      "operationId": "apiOverview"
+      "summary": "Backend overview"
+      "responses":
+        "200":
+          "description": "API name and relative documentation URL."
+          "content":
+            "application/json":
+              "schema":
+                "type": "object"
+                "properties":
+                  "message":
+                    "type": "string"
+                  "documentation":
+                    "type": "string"
+        "500":
+          "description": "Unexpected server or database connection error; internal details are hidden."
+          "content":
+            "application/json":
+              "schema":
+                "$ref": "#/components/schemas/Error"
+"components":
+  "schemas":
+    "Error":
+      "type": "object"
+      "required":
+        - "error"
+      "properties":
+        "error":
+          "type": "string"
+    "Message":
+      "type": "object"
+      "required":
+        - "message"
+      "properties":
+        "message":
+          "type": "string"
+    "User":
+      "type": "object"
+      "required":
+        - "id"
+        - "name"
+        - "email"
+        - "role"
+        - "age"
+        - "height_cm"
+        - "weight_kg"
+        - "fitness_goal"
+      "properties":
+        "id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "email":
+          "type": "string"
+          "maxLength": 255
+          "format": "email"
+          "description": "Trimmed and converted to lowercase."
+        "role":
+          "type": "string"
+          "enum":
+            - "User"
+            - "Admin"
+          "default": "User"
+        "age":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "height_cm":
+          "type": "number"
+          "minimum": 0.01
+          "maximum": 999.99
+          "multipleOf": 0.01
+          "nullable": true
+        "weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+          "nullable": true
+        "fitness_goal":
+          "type": "string"
+          "maxLength": 255
+          "minLength": 1
+    "UserCreate":
+      "type": "object"
+      "additionalProperties": false
+      "required":
+        - "name"
+        - "email"
+        - "password_hash"
+        - "fitness_goal"
+      "properties":
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "email":
+          "type": "string"
+          "maxLength": 255
+          "format": "email"
+          "description": "Trimmed and converted to lowercase."
+        "password_hash":
+          "type": "string"
+          "maxLength": 255
+          "writeOnly": true
+          "description": "Existing PHP password hash or !locked- placeholder. No plaintext passwords; M3 has no login/registration."
+          "example": "!locked-api-demo"
+        "role":
+          "type": "string"
+          "enum":
+            - "User"
+            - "Admin"
+          "default": "User"
+        "age":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "height_cm":
+          "type": "number"
+          "minimum": 0.01
+          "maximum": 999.99
+          "multipleOf": 0.01
+          "nullable": true
+        "weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+          "nullable": true
+        "fitness_goal":
+          "type": "string"
+          "maxLength": 255
+          "minLength": 1
+      "example":
+        "name": "API demo"
+        "email": "api-demo@example.test"
+        "password_hash": "!locked-api-demo"
+        "fitness_goal": "Strength"
+    "UserUpdate":
+      "type": "object"
+      "additionalProperties": false
+      "minProperties": 1
+      "properties":
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "email":
+          "type": "string"
+          "maxLength": 255
+          "format": "email"
+          "description": "Trimmed and converted to lowercase."
+        "password_hash":
+          "type": "string"
+          "maxLength": 255
+          "writeOnly": true
+          "description": "Existing PHP password hash or !locked- placeholder. No plaintext passwords; M3 has no login/registration."
+          "example": "!locked-api-demo"
+        "role":
+          "type": "string"
+          "enum":
+            - "User"
+            - "Admin"
+          "default": "User"
+        "age":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "height_cm":
+          "type": "number"
+          "minimum": 0.01
+          "maximum": 999.99
+          "multipleOf": 0.01
+          "nullable": true
+        "weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+          "nullable": true
+        "fitness_goal":
+          "type": "string"
+          "maxLength": 255
+          "minLength": 1
+      "description": "Only supplied fields change. Null is accepted only for nullable fields."
+      "example":
+        "fitness_goal": "Strength"
+    "Exercise":
+      "type": "object"
+      "required":
+        - "id"
+        - "name"
+        - "muscle_group"
+      "properties":
+        "id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "muscle_group":
+          "type": "string"
+          "maxLength": 50
+          "minLength": 1
+    "ExerciseCreate":
+      "type": "object"
+      "additionalProperties": false
+      "required":
+        - "name"
+        - "muscle_group"
+      "properties":
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "muscle_group":
+          "type": "string"
+          "maxLength": 50
+          "minLength": 1
+      "example":
+        "name": "API demo exercise"
+        "muscle_group": "Back"
+    "ExerciseUpdate":
+      "type": "object"
+      "additionalProperties": false
+      "minProperties": 1
+      "properties":
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "muscle_group":
+          "type": "string"
+          "maxLength": 50
+          "minLength": 1
+      "description": "Only supplied fields change. Null is accepted only for nullable fields."
+      "example":
+        "muscle_group": "Back"
+    "WorkoutPlan":
+      "type": "object"
+      "required":
+        - "id"
+        - "user_id"
+        - "name"
+        - "description"
+        - "planned_date"
+      "properties":
+        "id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "user_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "description":
+          "type": "string"
+          "maxLength": 65535
+          "description": "May be empty; TEXT limit is also 65535 UTF-8 bytes."
+        "planned_date":
+          "type": "string"
+          "format": "date"
+          "example": "2026-10-20"
+    "WorkoutPlanCreate":
+      "type": "object"
+      "additionalProperties": false
+      "required":
+        - "user_id"
+        - "name"
+        - "description"
+        - "planned_date"
+      "properties":
+        "user_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "description":
+          "type": "string"
+          "maxLength": 65535
+          "description": "May be empty; TEXT limit is also 65535 UTF-8 bytes."
+        "planned_date":
+          "type": "string"
+          "format": "date"
+          "example": "2026-10-20"
+      "example":
+        "user_id": 1
+        "name": "API demo plan"
+        "description": "Temporary routine"
+        "planned_date": "2026-10-20"
+    "WorkoutPlanUpdate":
+      "type": "object"
+      "additionalProperties": false
+      "minProperties": 1
+      "properties":
+        "user_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "name":
+          "type": "string"
+          "maxLength": 100
+          "minLength": 1
+        "description":
+          "type": "string"
+          "maxLength": 65535
+          "description": "May be empty; TEXT limit is also 65535 UTF-8 bytes."
+        "planned_date":
+          "type": "string"
+          "format": "date"
+          "example": "2026-10-20"
+      "description": "Only supplied fields change. Null is accepted only for nullable fields."
+      "example":
+        "planned_date": "2026-10-20"
+    "PlanExercise":
+      "type": "object"
+      "required":
+        - "id"
+        - "plan_id"
+        - "exercise_id"
+        - "position"
+        - "target_sets"
+        - "target_reps"
+        - "target_weight_kg"
+      "properties":
+        "id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "plan_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "exercise_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "position":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "target_sets":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "target_reps":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "target_weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+          "nullable": true
+    "PlanExerciseCreate":
+      "type": "object"
+      "additionalProperties": false
+      "required":
+        - "plan_id"
+        - "exercise_id"
+        - "position"
+      "properties":
+        "plan_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "exercise_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "position":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "target_sets":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "target_reps":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "target_weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+          "nullable": true
+      "example":
+        "plan_id": 1
+        "exercise_id": 2
+        "position": 10
+        "target_sets": 3
+        "target_reps": 8
+    "PlanExerciseUpdate":
+      "type": "object"
+      "additionalProperties": false
+      "minProperties": 1
+      "properties":
+        "plan_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "exercise_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "position":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "target_sets":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "target_reps":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+          "nullable": true
+        "target_weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+          "nullable": true
+      "description": "Only supplied fields change. Null is accepted only for nullable fields."
+      "example":
+        "target_reps": 8
+    "WorkoutSession":
+      "type": "object"
+      "required":
+        - "id"
+        - "user_id"
+        - "plan_id"
+        - "workout_date"
+        - "notes"
+      "properties":
+        "id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "user_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "plan_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+          "nullable": true
+          "description": "Optional; must belong to user_id. One session per user/date."
+        "workout_date":
+          "type": "string"
+          "format": "date"
+          "example": "2026-10-20"
+          "description": "Real date, not in the future (Europe/Sarajevo)."
+        "notes":
+          "type": "string"
+          "maxLength": 65535
+          "nullable": true
+          "description": "May be empty; TEXT limit is also 65535 UTF-8 bytes."
+    "WorkoutSessionCreate":
+      "type": "object"
+      "additionalProperties": false
+      "required":
+        - "user_id"
+        - "workout_date"
+      "properties":
+        "user_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "plan_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+          "nullable": true
+          "description": "Optional; must belong to user_id. One session per user/date."
+        "workout_date":
+          "type": "string"
+          "format": "date"
+          "example": "2026-10-20"
+          "description": "Real date, not in the future (Europe/Sarajevo)."
+        "notes":
+          "type": "string"
+          "maxLength": 65535
+          "nullable": true
+          "description": "May be empty; TEXT limit is also 65535 UTF-8 bytes."
+      "example":
+        "user_id": 1
+        "plan_id": null
+        "workout_date": "2026-10-19"
+        "notes": "Temporary session"
+    "WorkoutSessionUpdate":
+      "type": "object"
+      "additionalProperties": false
+      "minProperties": 1
+      "properties":
+        "user_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "plan_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+          "nullable": true
+          "description": "Optional; must belong to user_id. One session per user/date."
+        "workout_date":
+          "type": "string"
+          "format": "date"
+          "example": "2026-10-20"
+          "description": "Real date, not in the future (Europe/Sarajevo)."
+        "notes":
+          "type": "string"
+          "maxLength": 65535
+          "nullable": true
+          "description": "May be empty; TEXT limit is also 65535 UTF-8 bytes."
+      "description": "Only supplied fields change. Null is accepted only for nullable fields."
+      "example":
+        "notes": "Temporary session"
+    "ExerciseLog":
+      "type": "object"
+      "required":
+        - "id"
+        - "session_id"
+        - "exercise_id"
+        - "sets"
+        - "reps"
+        - "weight_kg"
+      "properties":
+        "id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "session_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "exercise_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "sets":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "reps":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+    "ExerciseLogCreate":
+      "type": "object"
+      "additionalProperties": false
+      "required":
+        - "session_id"
+        - "exercise_id"
+        - "sets"
+        - "reps"
+        - "weight_kg"
+      "properties":
+        "session_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "exercise_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "sets":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "reps":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+      "example":
+        "session_id": 1
+        "exercise_id": 2
+        "sets": 3
+        "reps": 8
+        "weight_kg": 20
+    "ExerciseLogUpdate":
+      "type": "object"
+      "additionalProperties": false
+      "minProperties": 1
+      "properties":
+        "session_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "exercise_id":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 4294967295
+        "sets":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "reps":
+          "type": "integer"
+          "minimum": 1
+          "maximum": 65535
+        "weight_kg":
+          "type": "number"
+          "minimum": 0
+          "maximum": 9999.99
+          "multipleOf": 0.01
+      "description": "Only supplied fields change. Null is accepted only for nullable fields."
+      "example":
+        "weight_kg": 20
+    "Ingredient":
+      "type": "object"
+      "required":
+        - "name"
+        - "measure"
+      "properties":
+        "name":
+          "type": "string"
+        "measure":
+          "type": "string"
+    "Meal":
+      "type": "object"
+      "required":
+        - "id"
+        - "name"
+        - "image"
+        - "category"
+        - "ingredients"
+      "properties":
+        "id":
+          "type": "string"
+        "name":
+          "type": "string"
+        "image":
+          "type": "string"
+          "nullable": true
+        "category":
+          "type": "string"
+          "nullable": true
+        "ingredients":
+          "type": "array"
+          "items":
+            "$ref": "#/components/schemas/Ingredient"
+    "RecoveryMeals":
+      "type": "object"
+      "required":
+        - "meals"
+        - "source"
+        - "note"
+      "properties":
+        "meals":
+          "type": "array"
+          "maxItems": 3
+          "items":
+            "$ref": "#/components/schemas/Meal"
+        "source":
+          "type": "string"
+          "example": "TheMealDB"
+        "note":
+          "type": "string"
