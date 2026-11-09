@@ -1,0 +1,8 @@
+Options -Indexes
+RewriteEngine On
+# Only documentation and the front controller are public backend files.
+RewriteRule ^docs/(?:index\.html|openapi\.yaml)?$ - [L]
+RewriteRule ^index\.php$ - [L]
+RewriteRule ^(?:config|dao|services|routes|database|logs|vendor|middleware)(?:/|$) - [F,L]
+RewriteRule ^(?:composer\.(?:json|lock)|\.htaccess)$ - [F,L]
+RewriteRule ^ index.php [QSA,L]

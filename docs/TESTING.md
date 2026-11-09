@@ -114,3 +114,49 @@ Environment: Windows / XAMPP PHP 8.2.12, PDO with pdo_mysql, MariaDB 10.4.32 at 
 Run from the repository root: `C:\xampp\php\php.exe tests/dao.php`. The script returns exit code 1 on failure and rolls back an active test transaction; success returns 0. It is CLI-only and does not create/import/drop tables. Run with the supplied sample data on an idle local database. InnoDB auto-increment counters can advance despite rollback; no test rows remain.
 
 Limitations: Oracle MySQL and phpMyAdmin's GUI import were not exercised. Future service-level date, ownership, email-format and required-plan-assignment validation are intentionally outside M2. Authentication, HTTP routes/status handling, frontend AJAX database integration and production deployment remain later milestones. No claims of those checks passing are made here.
+
+## Milestone 3 — 2026-11-07
+
+Environment: Windows XAMPP, Apache with mod_rewrite and AllowOverride All, PHP 8.2.12, local MariaDB development database using the existing ignored configuration, FlightPHP 3.19.5. Apache/MySQL were initially stopped and were started for testing. The database did not need reimporting. The original DAO classes, SQL schema, ERD and frontend files were not edited.
+
+| Check actually performed | Result |
+| --- | --- |
+| PHP syntax checks for application PHP, example config and CLI tests (private settings not printed) | Passed |
+| Existing tests/dao.php | 98 checks passed; rollback restored original rows |
+| tests/api.php through the actual Apache/XAMPP backend URL | 346 checks passed; temporary records removed |
+| All six entities: list, create, read, persisted/unchanged partial update and delete | Passed; correct 200/201 responses |
+| All six entities: missing IDs for GET/PUT/DELETE | 404 JSON as expected |
+| Empty/unknown fields, malformed/scalar/array JSON, wrong content type and invalid route IDs | 400 JSON as expected |
+| Entity validation: email normalization/format, names/lengths, roles/hash input, dates/future dates, positive integer counts and nonnegative two-decimal weights | Passed |
+| All seven foreign keys, invalid reference update, session-plan ownership and linked-plan transfer | Rejected with 400 as expected |
+| Duplicate emails/exercise names/assignments/user-date sessions and referenced exercise deletion | Safe 400 responses without SQL details |
+| User create/read/list/update responses | Password hashes omitted |
+| Live GET /api/meals/recovery | 200 with real TheMealDB recipe names, ingredients and structured fields |
+| MealService simulated connection timeout, upstream 500, malformed JSON, null/empty meal lists, malformed meal rows | Friendly 503 exceptions; failures appended to backend/logs/error.log |
+| Meal ingredient mapping and missing optional fields | Passed |
+| Isolated temporary PHP server using production error mapping and test-only routes outside the repository | HTTP 500 and 503 JSON matched expected safe messages; temporary server stopped |
+| External API error log inspected | Timestamped upstream failures and explicitly simulated timeout entries present; log remains ignored |
+| OpenAPI validation with temporary @apidevtools/swagger-parser | Passed including local schema references; 32 documented operations |
+| Swagger in headless Microsoft Edge | All 32 operations rendered, no parser/JavaScript errors; Try it out returned the actual exercise list |
+| Apache access to config.php, SQL schema, error.log, composer.lock and vendor/autoload.php | All denied with 403 |
+| Existing frontend JavaScript syntax | Both application scripts passed |
+| Existing tests/frontend.cjs, headless Edge through XAMPP | First run reported null-canvas JavaScript error at final error assertion; repeat passed all 72 checks |
+
+The frontend failure appears timing-dependent: the existing resize listener schedules renderCharts after 100 ms and navigation can remove its canvas. No frontend files or browser-test expectations were changed. A passing repeat does not prove this pre-existing race is fixed; it remains a known M1 limitation outside the M3 backend changes.
+
+Commands from the repository root:
+
+```powershell
+C:\xampp\php\php.exe tests/dao.php
+C:\xampp\php\php.exe tests/api.php
+node --check frontend/js/app.js
+node --check frontend/js/data.js
+```
+
+The existing browser suite used Playwright installed outside the repository in `%TEMP%\forma-m3-checks`, `FORMA_PLAYWRIGHT_PATH` pointing to its node_modules/playwright and `FORMA_BASE_URL` set to `http://localhost/MirzaPasic/Fitness-Planning-and-Workout-Progress-Management-System/frontend/`. Swagger/parser tools and the isolated HTTP error harness were also temporary, not runtime dependencies.
+
+The API suite compares the complete original JSON collections after cleanup; the DAO suite separately compares raw original rows after rollback. Neither suite modifies sample records or clears tables. Auto-increment counters advanced as expected. API tests deliberately append simulated external failures to the ignored log. An interrupted API test may leave its uniquely named fixtures; only remove those test IDs.
+
+Limitations: no production deployment, Oracle MySQL, real upstream outage or actual 8-second network timeout was forced. Connection failure/timeout handling was simulated at the transport boundary; HTTP 503 formatting was also checked with the isolated server. HTTP 500 used an injected unexpected exception in that server, not an outage of the development database. External-provider availability and Swagger CDN access depend on the network. Authentication/authorization (401/403), middleware/full request logging and frontend API integration are M4 work and were not claimed as implemented or tested. No GitHub or submission actions were performed.
+
+Final package check: Composer validated composer.json/composer.lock. Its only warning was that no project license is specified; no license was invented. Final PHP syntax checks passed after the last validation edits.

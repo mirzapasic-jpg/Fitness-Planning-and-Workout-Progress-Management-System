@@ -28,5 +28,14 @@ I designed the database entities and relationships myself during Milestone 1. I 
 Issues and Corrections:
 The first approach to reading the requirements document did not work, so I used another method.
 There was an issue with a variable in the DAO constructors, which was corrected after checking the code.
-Testing:
+Testing:   
 The database was imported successfully, and all 98 DAO test checks passed.
+--------------------------------------------------------------------------
+Milestone 3 – AI Usage Log
+
+AI Tool: ChatGPT
+AI was used as a supporting tool during Milestone 3, mainly for assistance with business logic, basic validation rules, testing, and improving documentation text.
+The implementation was reviewed and adjusted to fit the existing project structure. AI was not used as a replacement for writing the code.
+Issues and corrections:
+Some suggested validation rules needed adjustments to match the existing database fields.
+Some test suggestions were simplified to make them easier to run and understand.
